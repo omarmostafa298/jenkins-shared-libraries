@@ -11,9 +11,14 @@ def call(Map config = [:]) {
         passwordVariable: 'DOCKER_PASSWORD'
     )]) {
         sh """
+            set -e
+            echo "Logging in to Docker Hub..."
             echo "\$DOCKER_PASSWORD" | docker login -u "\$DOCKER_USERNAME" --password-stdin
+            echo "Pushing ${imageName}:${imageTag}..."
             docker push ${imageName}:${imageTag}
+            echo "Pushing ${imageName}:latest..."
             docker push ${imageName}:latest
+            echo "Push completed successfully!"
         """
     }
 }
